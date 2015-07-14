@@ -1,5 +1,7 @@
-require_relative "./a"
+# require_relative "./a"
 
 #usage ruby code.rb
 
-print_sentences 3
+# SENTENCES ? print_sentences(NUMBER) : print_words(NUMBER)
+
+

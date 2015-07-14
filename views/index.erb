@@ -1,0 +1,13 @@
+
+
+<a href="/" class="btn btn-primary">REFRESH</a>
+
+<ol class="list-group">
+	<% @data.each do |d| %>
+	<li class="list-group-item">
+		<span class="badge"><%= d[0] %></span>
+		<%= d[1] %>
+	</li>
+	<% end %>
+</ol>
+
