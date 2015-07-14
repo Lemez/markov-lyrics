@@ -1,3 +1,7 @@
+# run with  
+# rackup
+# and access at http://localhost:9292/ or http://rebeats-markov.dev:9292/
+
 require 'sinatra'
 require "opal"
 require 'react'
