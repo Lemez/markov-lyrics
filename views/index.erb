@@ -2,13 +2,15 @@
 
 <a href="/" class="btn btn-primary">REFRESH</a>
 
-<ol class="list-group">
-	<% @data.each do |d| %>
-	<li class="list-group-item">
-		<span class="badge" ><%= d[1] %></span>
-		<span class="badge" ><%= d[2] %></span>
-		<%= d[0] %>
-	</li>
+<ul class="list-group">
+	<% @data.each do |verse| %>
+
+		<% verse.keys.length.times do |i| %>
+			<% @d = verse[i+1]  %>
+			<% puts "#{i.to_s}--#{@d}---" %>
+			<%= partial :"partials/list"  %>
+		<% end %>
+		</br>
 	<% end %>
-</ol>
+</ul>
 

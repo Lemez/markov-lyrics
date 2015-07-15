@@ -10,3 +10,4 @@ gem "stanford-core-nlp"
 gem 'rhymes'
 gem 'string_to_ipa'
 gem 'ruby_rhymes'
+gem 'sinatra-partial'

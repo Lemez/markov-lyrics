@@ -6,13 +6,15 @@ require 'rhymes'
 require 'string_to_ipa'
 require 'ruby_rhymes'
 
+require_relative './string'
+require_relative './verse'
 
 opts = Trollop::options do
   opt :words, "Use word mode"                    # flag --monkey, default false
   opt :sentences, "Use sentences mode"                    # flag --monkey, default false
   opt :minsyll, "minimum syllables", :type => :integer, :default => 6         # string --name <s>, default nil
   opt :maxsyll, "maximum syllables", :type => :integer, :default => 10  # integer --num-limbs <i>, default to 4
-  opt :number, "number of items", :type => :integer, :default => 300         # string --name <s>, default nil
+  opt :number, "number of items", :type => :integer, :default => 100         # string --name <s>, default nil
   
 end
 
@@ -72,7 +74,7 @@ def parse_sentence textinput
 	  	end
 	  	words << sentenceAnnotated
 	end
-	p words
+	words
 end
 
 def setup_markov
@@ -84,8 +86,10 @@ def get_markov_data
 	setup_markov
 	print_markov(NUMBER)
 	keep_going_if_not_enough
-	sort_lines_into_verse
-	# @@data.each{|d| parse_sentence d[0]}
+
+	sort_lines_into_rhymes
+	detect_last_pos
+	define_verse_pattern
 	# get_ipa line
 end
 
@@ -95,24 +99,6 @@ def keep_going_if_not_enough
 	  	 print_markov(NUMBER)
 	end
 	
-end
-
-class String
-	def clean_up
-		words = self.split(" ")
-		words.reject!{|w| w.downcase.include?("chorus") or w.downcase.include?("verse") \
-										or w.downcase.include?("[") or w.downcase.include?("\\") \
-										or w.downcase.include?("}") or w.downcase.include?("{") \
-										or w.downcase.include?("]")
-										}
-		words.join(" ")
-	end
-
-	def separate_out
-		separated = self.split(" ").map! {|s| s[0]==s[0].upcase && s!="I" ? s="\n#{s}" : s }.join(" ") 
-		cleaner = separated.split("\n").map(&:strip).reject {|a| !a.include?(" ")}
-		cleaner
-	end
 end
 
 def get_syllables line
@@ -156,17 +142,108 @@ def print_markov n
 	end
 end
 
-def sort_lines_into_verse
+def sort_lines_into_rhymes
 
 	@d = @@data.dup
-	unique = @d.uniq {|x|x[-1]}
-	@d -= unique
+	@unique = @d.uniq {|x|x[-1]}
+	@d -= @unique
 
 	d_rhymes = @d.map{|c| c[-1]}
-	unique.each{|r| @d << r if d_rhymes.include?(r[-1])}
+
+	@unique.each do |r|
+	 if d_rhymes.include?(r[-1])
+	 	@d << r 
+	 	@unique.delete(r)
+	 end
+	end
 
 	@@data = @d.sort_by{|e| e[-1]}										
 	
+end
+
+def detect_last_pos
+	@temp = []
+	 @@data.each do |d| 
+	 	sentence_pos = parse_sentence d[0]
+	 	last_word, last_word_pos = sentence_pos[-1][-1][0], sentence_pos[-1][-1][-1]
+
+	 	status = last_word =~ /[A-Za-z]/
+	 	last_word_pos = sentence_pos[-1][-2][-1] if status.nil?
+
+	 	d << last_word_pos
+	 	@temp << d
+	 end
+	 @@data = @temp
+end
+
+def make_hash_of_rhyming_lines
+	rhymes = {}
+	@@data.map do |a| 
+		if rhymes[a[2]]
+			if rhymes[a[2]].length >= 1
+				rhyme_array = rhymes[a[2]] << a[0]
+				rhymes[a[2]] = rhyme_array
+			end
+		else
+			rhymes[a[2]] =  [a[0]]
+		end
+	end
+	@hash_rhyming_lines = rhymes
+end
+
+def create_verse pattern
+
+	@verse = {}
+
+	@hash_rhyming_lines.each_pair do |k,v|
+		case pattern
+		when 'ABAB'
+
+			if v.size==4 && !@verse.has_key?(1)
+				@verse[1],@verse[3] = v[0],v[1]
+				@hash_rhyming_lines[k] -= v[0..1]
+
+			elsif v.size==4 && !@verse.has_key?(2)
+				@verse[2],@verse[4] = v[0],v[1]
+				@hash_rhyming_lines[k] -= v[0..1]
+
+			elsif v.size>=2 && !@verse.has_key?(1)
+				@verse[1],@verse[3] = v[0],v[1]
+				@hash_rhyming_lines.delete(k)
+
+			elsif v.size>=2 && !@verse.has_key?(2)
+				@verse[2],@verse[4] = v[0],v[1]
+				@hash_rhyming_lines.delete(k)
+
+			end
+		end
+	end
+
+	all_lines = @@data.map{|a| a[0]}
+
+	@verse.each_pair do |number, line|
+		data_index = all_lines.index(line)
+		@verse[number] = @@data[data_index]
+	end
+
+	@verse.empty? ? @more_to_extract = false : @@verses << @verse
+
+end
+
+def define_verse_pattern
+
+	@@verses = []
+	@more_to_extract = true
+	
+	make_hash_of_rhyming_lines	
+
+	while @hash_rhyming_lines.keys.size > 1 && @more_to_extract 
+		
+		create_verse 'ABAB'
+
+	end
+
+	p @@verses
 end
 
 

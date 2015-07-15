@@ -39,6 +39,8 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
+    sinatra-partial (0.4.0)
+      sinatra
     source_map (3.0.1)
       json
     sprockets (2.12.4)
@@ -68,6 +70,7 @@ DEPENDENCIES
   rhymes
   ruby_rhymes
   sinatra
+  sinatra-partial
   stanford-core-nlp
   string_to_ipa
   trollop
