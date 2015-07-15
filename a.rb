@@ -90,6 +90,8 @@ def get_markov_data
 	sort_lines_into_rhymes
 	detect_last_pos
 	define_verse_pattern
+	make_chorus
+
 	# get_ipa line
 end
 
@@ -161,14 +163,18 @@ def sort_lines_into_rhymes
 	
 end
 
+def is_word_alpha?(word)
+	return word =~ /[A-Za-z]/
+end
+
 def detect_last_pos
 	@temp = []
 	 @@data.each do |d| 
 	 	sentence_pos = parse_sentence d[0]
 	 	last_word, last_word_pos = sentence_pos[-1][-1][0], sentence_pos[-1][-1][-1]
 
-	 	status = last_word =~ /[A-Za-z]/
-	 	last_word_pos = sentence_pos[-1][-2][-1] if status.nil?
+	 	realword = is_word_alpha?(last_word)
+	 	last_word_pos = sentence_pos[-1][-2][-1] if realword.nil?
 
 	 	d << last_word_pos
 	 	@temp << d
@@ -219,14 +225,14 @@ def create_verse pattern
 		end
 	end
 
-	all_lines = @@data.map{|a| a[0]}
+	@all_lines = @@data.map{|a| a[0]}
 
 	@verse.each_pair do |number, line|
-		data_index = all_lines.index(line)
+		data_index = @all_lines.index(line)
 		@verse[number] = @@data[data_index]
 	end
 
-	@verse.empty? ? @more_to_extract = false : @@verses << @verse
+	@verse[4].nil? ? @more_to_extract = false : @@verses << @verse
 
 end
 
@@ -242,8 +248,41 @@ def define_verse_pattern
 		create_verse 'ABAB'
 
 	end
+end
 
-	p @@verses
+def make_chorus
+	@chorus_words = []
+	biggest = @all_lines.flat_map{|a| a.split(" ")}.group_by(&:size).max.last
+	chorus_words_pos = parse_sentence biggest.join(" ")
+	biggest.map do |a| 
+		realword = is_word_alpha?(a)
+		unless realword.nil? 
+			@chorus_words << chorus_words_pos[biggest.index(a)]
+			
+		end
+	end
+
+	@hook_keyword = @chorus_words.flatten.first
+	@all_lines.each{|a| @hook = a if a.include?(@hook_keyword)}
+
+	@other_hooks = []
+	@other_hook_words = @hook.split(" ").map{|a| a.gsub(/[^A-Za-z]/,"")}.reject{|b|b.empty?}
+
+	@other_hook_words.each do |word|
+		@all_lines.each{|a| @other_hooks << a if a.include?(word) \
+											&& a!= @hook \
+											&& word.length > 4 }
+	end
+
+	@other_hooks.first.nil? ? @last = @chorus_words.flatten.last : @last =  @other_hooks.first
+
+	@@chorus = {
+		1 => "#{@hook_keyword.capitalize}, #{@hook_keyword.capitalize}",
+		2 =>  @hook.capitalize,
+		3 =>  "#{@hook_keyword.capitalize}, #{@hook_keyword.capitalize}",
+		4 =>  @last
+	}
+
 end
 
 

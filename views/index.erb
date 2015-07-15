@@ -5,10 +5,28 @@
 <ul class="list-group">
 	<% @data.each do |verse| %>
 
+<!-- display chorus -->
+		<% @verse_number =  @data.index(verse)+1 %>
+		<% if @verse_number % 2 == 0 %>
+
+			<% @chorus.keys.length.times do |i| %>
+
+				<% @d = @chorus[i+1]  %>
+
+				<% puts "#{i.to_s}--#{@d}---" %>
+				<%= partial :"partials/chorus"  %>
+
+			<% end %>
+		<% end %>
+
+<!-- display verses -->
 		<% verse.keys.length.times do |i| %>
+
 			<% @d = verse[i+1]  %>
+
 			<% puts "#{i.to_s}--#{@d}---" %>
-			<%= partial :"partials/list"  %>
+			<%= partial :"partials/verse"  %>
+			
 		<% end %>
 		</br>
 	<% end %>
