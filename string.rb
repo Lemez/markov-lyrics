@@ -14,4 +14,8 @@ class String
 		cleaner = separated.split("\n").map(&:strip).reject {|a| !a.include?(" ")}
 		cleaner
 	end
+
+	def alpha_strip
+		self.gsub(/[^A-Aa-z]/,"")
+	end
 end

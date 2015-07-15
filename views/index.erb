@@ -6,8 +6,8 @@
 	<% @data.each do |verse| %>
 
 <!-- display chorus -->
-		<% @verse_number =  @data.index(verse)+1 %>
-		<% if @verse_number % 2 == 0 %>
+		<% @verse_number =  @data.index(verse) %>
+		<% if @verse_number % 2 == 0 && @verse_number>0 %>
 
 			<% @chorus.keys.length.times do |i| %>
 
@@ -17,6 +17,7 @@
 				<%= partial :"partials/chorus"  %>
 
 			<% end %>
+			</br>
 		<% end %>
 
 <!-- display verses -->
@@ -25,10 +26,21 @@
 			<% @d = verse[i+1]  %>
 
 			<% puts "#{i.to_s}--#{@d}---" %>
-			<%= partial :"partials/verse"  %>
-			
+			<%= partial :"partials/verse" unless @d.nil?  %>
+
 		<% end %>
 		</br>
 	<% end %>
+<!-- display end choruses -->
+	
+		</br>
+		<% @chorus.keys.length.times do |i| %>
+
+			<% @d = @chorus[i+1]  %>
+
+			<% puts "#{i.to_s}--#{@d}---" %>
+			<%= partial :"partials/chorus"  %>
+		<% end %>
+	
 </ul>
 

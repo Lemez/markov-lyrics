@@ -6,6 +6,7 @@ require 'rhymes'
 require 'string_to_ipa'
 require 'ruby_rhymes'
 
+require_relative './array'
 require_relative './string'
 require_relative './verse'
 
@@ -80,6 +81,7 @@ end
 def setup_markov
 	@@markov = MarkyMarkov::Dictionary.new('dictionary2', 2) # Saves/opens dictionary.mmd
 	@@data = []
+	@last = ''
 end
 
 def get_markov_data
@@ -195,6 +197,7 @@ def make_hash_of_rhyming_lines
 		end
 	end
 	@hash_rhyming_lines = rhymes
+	@all_rhymes = @hash_rhyming_lines.dup
 end
 
 def create_verse pattern
@@ -213,11 +216,19 @@ def create_verse pattern
 				@verse[2],@verse[4] = v[0],v[1]
 				@hash_rhyming_lines[k] -= v[0..1]
 
-			elsif v.size>=2 && !@verse.has_key?(1)
+			elsif v.size==3 && !@verse.has_key?(2)
+				@verse[2],@verse[4], @last = v[0],v[1],v[2]
+				@hash_rhyming_lines.delete(k)
+
+			elsif v.size==3 && !@verse.has_key?(2)
+				@verse[2],@verse[4], @last = v[0],v[1],v[2]
+				@hash_rhyming_lines.delete(k)
+
+			elsif v.size==2 && !@verse.has_key?(1)
 				@verse[1],@verse[3] = v[0],v[1]
 				@hash_rhyming_lines.delete(k)
 
-			elsif v.size>=2 && !@verse.has_key?(2)
+			elsif v.size==2 && !@verse.has_key?(2)
 				@verse[2],@verse[4] = v[0],v[1]
 				@hash_rhyming_lines.delete(k)
 
@@ -250,6 +261,23 @@ def define_verse_pattern
 	end
 end
 
+def get_random_word(array)
+	randomarray = array[Random.rand(array.length)][0].split(" ")
+	return randomarray
+end
+
+def get_long_word(array)
+	get_random_word(array).longest.alpha_strip
+end
+
+def get_short_word(array)
+	get_random_word(array).shortest.alpha_strip
+end
+
+def get_short_phrase n
+	@@markov.generate_n_words(n)
+end
+
 def make_chorus
 	@chorus_words = []
 	biggest = @all_lines.flat_map{|a| a.split(" ")}.group_by(&:size).max.last
@@ -274,13 +302,18 @@ def make_chorus
 											&& word.length > 4 }
 	end
 
-	@other_hooks.first.nil? ? @last = @chorus_words.flatten.last : @last =  @other_hooks.first
+	rhyme = get_last_word_rhyme(@hook)
+
+	@last=@all_rhymes[rhyme].first if @last.empty? 
+	@other=get_short_phrase(4).alpha_strip
+	
 
 	@@chorus = {
-		1 => "#{@hook_keyword.capitalize}, #{@hook_keyword.capitalize}",
-		2 =>  @hook.capitalize,
-		3 =>  "#{@hook_keyword.capitalize}, #{@hook_keyword.capitalize}",
-		4 =>  @last
+		1 =>  @hook.capitalize,
+		2 => "#{@hook_keyword.capitalize}, #{@hook_keyword.capitalize}",
+		3 =>  @last,
+		4 =>  @other.capitalize,
+		5 =>  @hook_keyword.capitalize
 	}
 
 end
