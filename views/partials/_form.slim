@@ -1,0 +1,5 @@
+form method="post" action="/"
+	select name="patterns"
+		- @patterns.each do |pattern|
+	  		option name='#{pattern}'  value='#{pattern}' onmouseover="$(this).addClass('selected');" onmouseleave="$(this).removeClass('selected');" = pattern 
+	input type="submit" name="Submit" 

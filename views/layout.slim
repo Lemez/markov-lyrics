@@ -1,0 +1,62 @@
+doctype html
+html
+  head
+    title "Markov Lyrics"
+	meta name="viewport" content="width=device-width, initial-scale=1.0"
+	link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"
+	link href="/vendor/bootstrap/css/jon.css" rel="stylesheet"
+
+  body
+    .container
+    	nav class="navbar navbar-default" role="navigation"
+			.navbar-header
+
+				button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"
+
+			    	span class="sr-only" Toggle navigation
+			      	span class="icon-bar"
+			      	span class="icon-bar"
+			      	span class="icon-bar"
+
+			    a class="navbar-brand" href="/" Markov Lyrics Generator
+
+			    div class="nav-collapse"
+			    	== partial ('partials/form')
+			           
+
+			    / div class="navbar-collapse collapse"
+			    / 	ul class="nav navbar-nav"
+			    / 		/ li
+			    / 			/ a href="/secure/place" Secret
+
+				   /  ul class="nav navbar-nav navbar-right"
+				   /      li class="dropdown"
+				   /      	a href="#" class="dropdown-toggle" data-toggle="dropdown"
+				   /        		/ = username 
+				   /        		b class="caret"
+
+				   /      ul class="dropdown-menu"
+				   /          li
+				   /          	a href="/login/form" Login
+				   /          li class="divider"
+				   /          li
+				   /          	a href="/logout" Logout
+
+
+    	a href="/" class="btn btn-primary" REFRESH
+    	.input-bar
+			input type='range' min='1' max='10' value='5' step='1'
+				#boxL
+		.lyrics
+			 - if @error
+			    div class="alert alert-error"
+			    	<!-- = @error -->
+      
+    == yield
+      
+    footer class="footer"
+    	p © Lemez
+    
+    script type="text/javascript" src="/vendor/jquery-1.9.1.min.js"
+    script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"
+    script type="text/javascript" src="/vendor/bootstrap/js/jon.js"

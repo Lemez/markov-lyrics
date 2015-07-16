@@ -7,19 +7,28 @@ require "opal"
 require 'react'
 require_relative "./a"
 require 'sinatra/partial'
+require 'slim'
 
 class HelloWorldApp < Sinatra::Base
-	register Sinatra::Partial
-	set :partial_template_engine, :erb
+
+   	register Sinatra::Partial
+	set :partial_template_engine, :slim
 	enable :partial_underscores
+	enable :sessions
 
 	    get '/' do
-
-	      get_markov_data
+	      pattern = params[:p]
+	      get_markov_data(pattern)
 	  	  @data = @@verses
 	  	  @chorus = @@chorus
-	      erb :index
+	  	  @patterns = PATTERNS
+	      slim :index 
+	    end
 
+	    post '/' do
+	      pattern = params[:patterns]
+	      p "===========#{pattern}============="
+	      redirect "/?p=#{pattern}"
 	    end
 
 

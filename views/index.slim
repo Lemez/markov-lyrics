@@ -1,0 +1,20 @@
+ul class="list-group"
+	- @data.each do |verse| 
+
+		/ display chorus every two verses
+		- verse_number = @data.index(verse) 
+		- if verse_number % 2 == 0 && verse_number>0 
+			== partial 'partials/chorus'
+
+		/ display verses 
+		- verse.keys.length.times do |i| 
+			 - @d = verse[i+1]
+			 - unless @d.nil?	
+			 	== partial 'partials/verse' 
+		br
+		
+
+	/ display end chorus 
+	== partial 'partials/chorus'
+
+

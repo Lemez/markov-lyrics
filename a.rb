@@ -14,7 +14,7 @@ opts = Trollop::options do
   opt :words, "Use word mode"                    # flag --monkey, default false
   opt :sentences, "Use sentences mode"                    # flag --monkey, default false
   opt :minsyll, "minimum syllables", :type => :integer, :default => 6         # string --name <s>, default nil
-  opt :maxsyll, "maximum syllables", :type => :integer, :default => 10  # integer --num-limbs <i>, default to 4
+  opt :maxsyll, "maximum syllables", :type => :integer, :default => 8  # integer --num-limbs <i>, default to 4
   opt :number, "number of items", :type => :integer, :default => 100         # string --name <s>, default nil
   
 end
@@ -25,6 +25,8 @@ MAX = opts[:maxsyll]
 WORDS = opts[:words]
 SENTENCES = opts[:sentences]
 NUMBER = opts[:number]
+
+PATTERNS = ['AABB', 'ABAB', 'ABBA']
 
 StanfordCoreNLP.jar_path = '/Users/JW/Dropbox/Dev/Websites/FrontEnd/_JS plugins/stanford-core-nlp-minimal/'
 StanfordCoreNLP.model_path = '/Users/JW/Dropbox/Dev/Websites/FrontEnd/_JS plugins/stanford-core-nlp-minimal/'
@@ -39,6 +41,10 @@ def get_last_word_rhyme(line)
 	rescue Rhymes::UnknownWord => e
 		return nil
 	end
+end
+
+def get_rhyme(line)
+	line.to_phrase.flat_rhymes
 end
 
 def get_ipa line
@@ -78,14 +84,18 @@ def parse_sentence textinput
 	words
 end
 
-def setup_markov
+def setup_markov(pattern)
 	@@markov = MarkyMarkov::Dictionary.new('dictionary2', 2) # Saves/opens dictionary.mmd
 	@@data = []
 	@last = ''
+	@pattern = pattern
+	
 end
 
-def get_markov_data
-	setup_markov
+def get_markov_data(pattern="ABAB")
+	pattern = "ABAB" if !PATTERNS.include?(pattern) or pattern.nil?
+	p "======pattern=#{pattern}========="
+	setup_markov(pattern)
 	print_markov(NUMBER)
 	keep_going_if_not_enough
 
@@ -200,50 +210,64 @@ def make_hash_of_rhyming_lines
 	@all_rhymes = @hash_rhyming_lines.dup
 end
 
-def create_verse pattern
+def create_verse
 
 	@verse = {}
 
 	@hash_rhyming_lines.each_pair do |k,v|
-		case pattern
+
+		case @pattern
 		when 'ABAB'
-
-			if v.size==4 && !@verse.has_key?(1)
-				@verse[1],@verse[3] = v[0],v[1]
-				@hash_rhyming_lines[k] -= v[0..1]
-
-			elsif v.size==4 && !@verse.has_key?(2)
-				@verse[2],@verse[4] = v[0],v[1]
-				@hash_rhyming_lines[k] -= v[0..1]
-
-			elsif v.size==3 && !@verse.has_key?(2)
-				@verse[2],@verse[4], @last = v[0],v[1],v[2]
-				@hash_rhyming_lines.delete(k)
-
-			elsif v.size==3 && !@verse.has_key?(2)
-				@verse[2],@verse[4], @last = v[0],v[1],v[2]
-				@hash_rhyming_lines.delete(k)
-
-			elsif v.size==2 && !@verse.has_key?(1)
-				@verse[1],@verse[3] = v[0],v[1]
-				@hash_rhyming_lines.delete(k)
-
-			elsif v.size==2 && !@verse.has_key?(2)
-				@verse[2],@verse[4] = v[0],v[1]
-				@hash_rhyming_lines.delete(k)
-
-			end
+			@a1,@a2,@b1,@b2 = 1,3,2,4
+		when 'AABB'
+			@a1,@a2,@b1,@b2 = 1,2,3,4
+		when 'ABBA'
+			@a1,@a2,@b1,@b2 = 1,4,2,3
 		end
+
+		p "pattern:#{@pattern}"
+		p "a1,a2,b1,b2:#{[@a1,@a2,@b1,@b2].to_s}"
+		first,second,third,fourth = @a1,@a2,@b1,@b2
+		
+		if v.size==4 && !@verse.has_key?(@a1)
+			@verse[first],@verse[second] = v[0],v[1]
+			@hash_rhyming_lines[k] -= v[0..1]
+
+		elsif v.size==4 && !@verse.has_key?(@b1)
+			@verse[third],@verse[fourth] = v[0],v[1]
+			@hash_rhyming_lines[k] -= v[0..1]
+
+		elsif v.size==3 && !@verse.has_key?(@a1)
+			@verse[first],@verse[second], @last = v[0],v[1],v[2]
+			@hash_rhyming_lines.delete(k)
+
+		elsif v.size==3 && !@verse.has_key?(@b1)
+			@verse[third],@verse[fourth], @last = v[0],v[1],v[2]
+			@hash_rhyming_lines.delete(k)
+
+		elsif v.size==2 && !@verse.has_key?(@a1)
+			@verse[first],@verse[second] = v[0],v[1]
+			@hash_rhyming_lines.delete(k)
+
+		elsif v.size==2 && !@verse.has_key?(@b1)
+			@verse[third],@verse[fourth] = v[0],v[1]
+			@hash_rhyming_lines.delete(k)
+
+		end	
 	end
 
 	@all_lines = @@data.map{|a| a[0]}
+
+	p "verse: #{@verse}"
 
 	@verse.each_pair do |number, line|
 		data_index = @all_lines.index(line)
 		@verse[number] = @@data[data_index]
 	end
 
-	@verse[4].nil? ? @more_to_extract = false : @@verses << @verse
+	p "verse: #{@verse}"
+
+	@verse[3].nil? ? @more_to_extract = false : @@verses << @verse
 
 end
 
@@ -256,7 +280,7 @@ def define_verse_pattern
 
 	while @hash_rhyming_lines.keys.size > 1 && @more_to_extract 
 		
-		create_verse 'ABAB'
+		create_verse
 
 	end
 end
@@ -273,7 +297,7 @@ end
 def get_short_word(array)
 	get_random_word(array).shortest.alpha_strip
 end
-
+	
 def get_short_phrase n
 	@@markov.generate_n_words(n)
 end
@@ -305,8 +329,7 @@ def make_chorus
 	rhyme = get_last_word_rhyme(@hook)
 
 	@last=@all_rhymes[rhyme].first if @last.empty? 
-	@other=get_short_phrase(4).alpha_strip
-	
+	@other=get_short_phrase(4)
 
 	@@chorus = {
 		1 =>  @hook.capitalize,

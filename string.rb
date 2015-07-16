@@ -16,6 +16,6 @@ class String
 	end
 
 	def alpha_strip
-		self.gsub(/[^A-Aa-z]/,"")
+		self.gsub(/[^A-Aa-z ]/,"")
 	end
 end
