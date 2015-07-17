@@ -13,3 +13,9 @@ gem 'ruby_rhymes'
 gem 'sinatra-partial'
 gem 'slim'
 gem 'wordnet-defaultdb'
+
+gem "sinatra-activerecord"
+gem "sqlite3"
+gem "rake"
+
+ gem 'sinatra-initializers'

@@ -1,16 +1,20 @@
-# run with  
-# rackup
-# and access at http://localhost:9292/ or http://rebeats-markov.dev:9292/
-
 require 'sinatra'
 require "opal"
 require 'react'
-require_relative "./a"
 require 'sinatra/partial'
 require 'slim'
+require "sinatra/activerecord"
+require 'sinatra-initializers'
+
+require_relative "./a"
+
+set :database, {adapter: "sqlite3", database: "markov.sqlite3"}
+# or set :database_file, "path/to/database.yml"
 
 class HelloWorldApp < Sinatra::Base
 
+	register Sinatra::ActiveRecordExtension
+	register Sinatra::Initializers
    	register Sinatra::Partial
 	set :partial_template_engine, :slim
 	enable :partial_underscores

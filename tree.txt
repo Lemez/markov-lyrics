@@ -1,0 +1,31 @@
+Song
+	- # shares
+	- user created
+	- datetime created
+	- number of stanzas
+	- stanza n
+			- type (verse/chorus/mid 8) 
+			- number of lines	
+			- pattern
+			- position_in_song
+			- lines
+					- line n
+							- line_number
+							- number of words
+							- number of syllables
+							- last word rhyme
+							- last word pos
+							-  words
+										- word n
+												- position in line
+												- rhyme
+												- meaning
+												- lemma
+												- number of tokens
+												- tokens
+														- token n
+																- pos
+										
+											
+
+
