@@ -8,6 +8,7 @@ and access at
 Migrations
 
 1) create migration
+
 	bundle exec rake db:create_migration NAME=create_words_table_again
 
 2) create a table
