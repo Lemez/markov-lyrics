@@ -1,4 +1,4 @@
-Run with  
+Run with
 
 	rackup or bundle exec rackup
 
@@ -37,7 +37,9 @@ ActiveRecord Store
 
 access via
 
+	u = User.new(color: 'black', homepage: '37signals.com')
   	u.settings[:country] = 'Denmark' 
+  	
   	u.color                          # Accessor stored attribute
 	u.settings[:country] = 'Denmark' # Any attribute, even if not specified with an accessor
 

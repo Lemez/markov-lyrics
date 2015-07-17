@@ -5,7 +5,5 @@ class Stanza < ActiveRecord::Base
   has_many :lines
 
   store :settings, accessors: [:type, :number_lines, :pattern, :position_in_song], coder: JSON
-
-
   
 end

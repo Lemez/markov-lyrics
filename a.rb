@@ -81,18 +81,30 @@ def parse_sentence textinput
 	words
 end
 
-def setup_markov(pattern)
+def setup_markov
 	@@markov = MarkyMarkov::Dictionary.new('dictionary2', 2) # Saves/opens dictionary.mmd
+end
+
+def validate_pattern pattern
+	pattern = "ABAB" if !PATTERNS.include?(pattern) or pattern.nil?
+	p "======pattern=#{pattern}========="
+	@pattern = pattern
+end
+
+def setup_song
+
 	@@data = []
 	@last = ''
-	@pattern = pattern
+
+	validate_pattern(pattern)
+	@song = Song.new(pattern: @pattern)
 	
 end
 
 def get_markov_data(pattern="ABAB")
-	pattern = "ABAB" if !PATTERNS.include?(pattern) or pattern.nil?
-	p "======pattern=#{pattern}========="
-	setup_markov(pattern)
+	
+	setup_song
+	
 	print_markov(NUMBER)
 	keep_going_if_not_enough
 
@@ -142,6 +154,9 @@ end
 
 
 def print_markov n
+
+	setup_markov
+
 	!WORDS.nil? ? sentences = @@markov.generate_n_words(n*10) : sentences = @@markov.generate_n_sentences(n)
 
 	sentences.clean_up.separate_out.each do |line|
