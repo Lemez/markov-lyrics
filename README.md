@@ -1,8 +1,11 @@
-# run with  
-# rackup
-# and access at http://localhost:9292/ or http://rebeats-markov.dev:9292/
+Run with  
 
-Migrations - HOW TO
+	rackup or bundle exec rackup
+
+and access at 
+	http://localhost:9292/ or http://rebeats-markov.dev:9292/
+
+Migrations
 
 1) create migration
 	bundle exec rake db:create_migration NAME=create_words_table_again
@@ -21,7 +24,6 @@ OR modify existing tables
 	  	rename_column :songs, :numer_of_shares, :number_of_shares
 	  	add_column :lines, :line, :string
 	end
-
 
 3) make change on db
 
