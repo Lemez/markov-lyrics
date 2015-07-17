@@ -15,6 +15,7 @@ Song
 							- number of syllables
 							- last word rhyme
 							- last word pos
+							- line
 							-  words
 										- word n
 												- position in line

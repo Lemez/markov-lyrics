@@ -29,3 +29,18 @@ OR modify existing tables
 3) make change on db
 
 	bundle exec rake db:migrate
+
+
+ActiveRecord Store
+
+ 	store :settings, accessors: [:line_number, :number_words, :number_syllables, :last_rhyme, :last_pos, :line], coder: JSON
+
+access via
+
+  	u.settings[:country] = 'Denmark' 
+  	u.color                          # Accessor stored attribute
+	u.settings[:country] = 'Denmark' # Any attribute, even if not specified with an accessor
+
+	# There is no difference between strings and symbols for accessing custom attributes
+	u.settings[:country]  # => 'Denmark'
+	u.settings['country'] # => 'Denmark'
