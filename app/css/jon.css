@@ -1,7 +1,11 @@
-html {
+/*html {
   height: 100%;
   background: -webkit-radial-gradient(rgba(161, 222, 240, 0.75), rgba(64, 129, 147, 0.75)), url(//i.imgur.com/3JZchqt.png), url(//i.imgur.com/9kxBTzr.jpg);
   background: radial-gradient(rgba(161, 222, 240, 0.75), rgba(64, 129, 147, 0.75)), url(//i.imgur.com/3JZchqt.png), url(//i.imgur.com/9kxBTzr.jpg);
+}*/
+
+#speak, #audio {
+  display: none;
 }
 
 div.lyrics {
@@ -10,6 +14,10 @@ div.lyrics {
 
 .selected {
   background-color: yellow;
+}
+
+select {
+  margin: 10% auto 10% auto;
 }
 .input-bar {
   position: relative;
@@ -38,9 +46,12 @@ ul
     list-style-type: none;
 }
 
-input[type='range'], input[type='range']::-webkit-slider-runnable-track, input[type='range']::-webkit-slider-thumb {
+/*input[type='range'], input[type='range']::-webkit-slider-runnable-track, 
+*/
+input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
 }
+
 input[type='range']::-webkit-slider-runnable-track {
   position: relative;
   box-sizing: border-box;
@@ -107,6 +118,7 @@ input[type='range']::-webkit-slider-thumb {
   -webkit-filter: drop-shadow(0 1px #516570);
           filter: drop-shadow(0 1px #516570);
 }
+
 input[type='range']::-moz-range-thumb {
   box-sizing: border-box;
   border: solid 0.125em rgba(205, 224, 230, 0.5);

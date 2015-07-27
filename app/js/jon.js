@@ -1,36 +1,18 @@
 $(document).ready(function() {
 
-	$.myapp = {};
+	var input = document.querySelector('input');
+	var span = document.querySelector('#boxL');
 
-
-	function enableLoop() { 
-		  var myAudio = document.getElementById('drums');
-		  // myAudio.paused ? myAudio.play() : myAudio.stop();
-
-		  lowLag.init();
-		  lowLag.load(["/audio/drums1.ogg","/audio/drums1.wav"],"drums");
-		  lowLag.play("drums");
-		} 
-
-	$('#play').on('click', function() {
-		enableLoop();
-		// $('#speech').html('- speak_chorus');
+	input.addEventListener('input', function()
+	{
+    	span.textContent = input.value;
 	});
-
-
 
 });
 
 
 
-// var input = document.querySelector('input');
 
-// var span = document.querySelector('#boxL');
-
-// input.addEventListener('input', function()
-// {
-//     span.textContent = input.value;
-// });
 
 // var range_el = document.querySelector('input[type=range]'), 
 //     style_el = document.createElement('style'), 

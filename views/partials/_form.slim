@@ -1,5 +1,13 @@
-form method="post" action="/"
+form method="put" action="/"
+	.input-bar
+		&range min='50' max='250' value="#{@speed}" step='10' name="speed" onchange="$('#boxL').text($(this).value);" 
+		#boxL
+		&range min='10' max='100' value="#{@pitch}" step='10' name="pitch" onchange="$('#boxR').text($(this).value);" 
+		#boxR
+		
+
 	select name="patterns"
-		- @patterns.each do |pattern|
-	  		option name='#{pattern}'  value='#{pattern}' onmouseover="$(this).addClass('selected');" onmouseleave="$(this).removeClass('selected');" = pattern 
+		- PATTERNS.each do |p|
+	  		option name='#{p}'  value='#{p}' onmouseover="$(this).addClass('selected');" onmouseleave="$(this).removeClass('selected');" = p 
+
 	input type="submit" name="Submit" 

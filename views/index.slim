@@ -1,4 +1,42 @@
-ul class="list-group"
+#audio
+	javascript:
+		var myAudio = new Howl({
+			  urls: ['drums1.ogg', 'drums1.wav'],
+			  loop: true,
+			  volume: 0.8
+			  // onend: function() {console.log('done!');}
+			});
+
+		function enableLoop() { 
+		  // var myAudio = document.getElementById('drums');
+		  // myAudio.paused ? myAudio.play() : myAudio.pause();
+
+		  // lowLag.init({"sm2url":"/sm2/swf/"});
+		  // lowLag.load(["drums1.ogg","drums1.wav"],"drums");
+		  // lowLag.play("drums");
+		} 
+
+
+		$('#play').on('click', function() {
+			myAudio.play();
+		});
+
+		$('#stop').on('click', function() {
+			myAudio.stop();
+		});
+
+
+
+#speak
+	= @chorus.values.join(" ")
+	javascript:
+		$('#speak-btn').on('click', function() {
+			console.log('hello world!')
+			// $('#speech').html('- speak_chorus');
+		});
+
+br
+ul.list-group
 	- @data.each do |verse| 
 
 		/ display chorus every two verses
@@ -17,4 +55,6 @@ ul class="list-group"
 	/ display end chorus 
 	== partial 'partials/chorus'
 
+
+/ speak each line
 

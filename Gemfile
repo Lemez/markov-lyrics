@@ -19,3 +19,17 @@ gem "sqlite3"
 gem "rake"
 
  gem 'sinatra-initializers'
+ gem 'sinatra-assetpack', :require => 'sinatra/assetpack'
+ gem 'sinatra-asset-pipeline'
+
+ gem 'classifier'
+ # gem 'gsl'
+ gem "espeak-ruby", require: "espeak"
+
+ gem "pry"
+ gem 'parallel'
+
+ # gem 'gemcutter'
+ # gem 'tumble'
+ # gem 'words'
+ # gem 'wordnet'

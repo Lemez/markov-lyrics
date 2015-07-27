@@ -5,35 +5,86 @@ require 'sinatra/partial'
 require 'slim'
 require "sinatra/activerecord"
 require 'sinatra-initializers'
+require 'pry'
+require 'sinatra/base'
+require 'sinatra/asset_pipeline'
+require 'sinatra/assetpack'
 
 require_relative "./a"
 
 set :database, {adapter: "sqlite3", database: "markov.sqlite3"}
 # or set :database_file, "path/to/database.yml"
 
+Slim::Engine.set_options shortcut: {'&' => {tag: 'input', attr: 'type'}, '#' => {attr: 'id'}, '.' => {attr: 'class'}}
+
+
 class HelloWorldApp < Sinatra::Base
 
 	register Sinatra::ActiveRecordExtension
 	register Sinatra::Initializers
    	register Sinatra::Partial
+   	register Sinatra::AssetPack
+
+  	set :public_folder, 'public'
 	set :partial_template_engine, :slim
 	enable :partial_underscores
 	enable :sessions
 
-	    get '/' do
-	      pattern = params[:p]
-	      get_markov_data(pattern)
-	  	  @data = @@verses
-	  	  @chorus = @@chorus
-	  	  @patterns = PATTERNS
-	      slim :index 
-	    end
+	set :root, File.dirname(__FILE__) # You must set app root
+	set :static, true #PUT ALL STATIC FILES IN PUBLIC!
 
-	    post '/' do
-	      pattern = params[:patterns]
-	      p "===========#{pattern}============="
-	      redirect "/?p=#{pattern}"
-	    end
+	set :assets_precompile, %w(app.js app.css *.png *.jpg *.svg *.ogg *.wav *.swf)
+	register Sinatra::AssetPipeline 
+
+	assets {
+
+		    serve '/js',     from: 'app/js'        # Default
+		    serve '/css',     from: 'app/css'        # Default
+		    serve '/audio', from: 'app/audio' 
+
+		    js :application, [
+			    '/js/jquery-1.9.1.min.js',
+			    '/js/*.js'
+  			]
+  			css :application, [
+			    '/css/*.css'
+		   	]  
+  	}
+
+  	
+
+  	@@reloading = true
+
+	get '/' do
+
+	    	pattern = params[:patterns]
+	    	speed = params[:speed]
+	      	pitch = params[:pitch]
+	    
+	     	get_markov_data(pattern,speed,pitch) if @@reloading
+
+	      	@data = @@verses
+	  	  	@chorus = @@chorus
+	  	  	@drums = "/audio/drums1.ogg"
+
+	      	slim :index,
+		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}
+
+	end
+
+	put '/' do
+
+	    	  pattern = params[:patterns]
+		      speed = params[:speed]
+		      pitch = params[:pitch]
+		  	 
+		  	  @@reloading = false
+
+		      slim :index,
+		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}
+
+	end
+
 
 
 		# configure do

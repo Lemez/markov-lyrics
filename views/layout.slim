@@ -3,25 +3,28 @@ html
   head
     title "Markov Lyrics"
 	meta name="viewport" content="width=device-width, initial-scale=1.0"
-	link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"
-	link href="/vendor/bootstrap/css/jon.css" rel="stylesheet"
+	link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'
+	link href='http://fonts.googleapis.com/css?family=Cardo:400,700' rel='stylesheet' type='text/css'
+	== css :application
+	== js :application
 
   body
     .container
-    	nav class="navbar navbar-default" role="navigation"
+    	nav.navbar.navbar-default role="navigation"
 			.navbar-header
 
-				button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"
+				button.navbar-toggle type="button"  data-toggle="collapse" data-target=".navbar-collapse"
 
-			    	span class="sr-only" Toggle navigation
-			      	span class="icon-bar"
-			      	span class="icon-bar"
-			      	span class="icon-bar"
+			    	span.sr-only Toggle navigation
+			      	span.icon-bar
+			      	span.icon-bar
+			      	span.icon-bar
+			      
 
-			    a class="navbar-brand" href="/" Markov Lyrics Generator
+			    a.navbar-brand href="/" Markov Lyrics Generator
 
-			    div class="nav-collapse"
-			    	== partial ('partials/form')
+			    div.nav-collapse
+			    == partial ('partials/form')
 			           
 
 			    / div class="navbar-collapse collapse"
@@ -43,20 +46,21 @@ html
 				   /          	a href="/logout" Logout
 
 
-    	a href="/" class="btn btn-primary" REFRESH
-    	.input-bar
-			input type='range' min='1' max='10' value='5' step='1'
-				#boxL
+    	a.btn.btn-primary href="/"  REFRESH
+    	button.btn.btn-primary#speak-btn SPEAK
+    	.play
+    		button#play PLAY
+    		audio#drums [loop type="audio/ogg" src="drums1.ogg"] 
+    		button#stop STOP
+    	
 		.lyrics
 			 - if @error
-			    div class="alert alert-error"
+			    div.alert.alert-error
 			    	<!-- = @error -->
       
     == yield
       
-    footer class="footer"
+    footer.footer
     	p © Lemez
-    
-    script type="text/javascript" src="/vendor/jquery-1.9.1.min.js"
-    script type="text/javascript" src="/vendor/bootstrap/js/bootstrap.min.js"
-    script type="text/javascript" src="/vendor/bootstrap/js/jon.js"
+
+

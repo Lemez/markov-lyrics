@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150717092827) do
+ActiveRecord::Schema.define(version: 20150725024938) do
 
   create_table "lines", force: :cascade do |t|
     t.integer "line_number"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150717092827) do
     t.string  "last_word_rhyme"
     t.string  "last_word_pos"
     t.string  "line"
+    t.boolean "has_rhyme"
   end
 
   create_table "songs", force: :cascade do |t|
@@ -28,12 +29,12 @@ ActiveRecord::Schema.define(version: 20150717092827) do
     t.datetime "created_at"
     t.integer  "number_of_stanzas"
     t.string   "created_by"
+    t.string   "pattern"
   end
 
   create_table "stanzas", force: :cascade do |t|
     t.string  "type"
     t.integer "number_of_lines"
-    t.string  "pattern"
     t.integer "position_in_song"
   end
 
