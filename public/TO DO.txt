@@ -1,0 +1,6 @@
+TO DO
+
+http://responsivevoice.org/api/
+VOCODER JS
+
+GOOGLE VOICE API?
