@@ -29,11 +29,15 @@
 
 #speak
 	= @chorus.values.join(" ")
-	javascript:
-		$('#speak-btn').on('click', function() {
-			console.log('hello world!')
-			// $('#speech').html('- speak_chorus');
-		});
+javascript:
+	meSpeak.loadConfig("mespeak/mespeak_config.json");
+	meSpeak.loadVoice('mespeak/voices/en/en-us.json');
+	$('#speak-btn').on('click', function() {
+		var text = $('#speak').text();
+		meSpeak.speak(text);
+		console.log(text);
+		// $('#speech').html('- speak_chorus');
+	});
 
 br
 ul.list-group
