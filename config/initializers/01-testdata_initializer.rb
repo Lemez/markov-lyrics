@@ -1,4 +1,3 @@
-TEST = true
 TESTVERSES = [
 				{
 					1=>["Lying awake,", 4, "AKE", "RB"],
@@ -27,4 +26,5 @@ TESTCHORUS = {
 		# 4=>"It it it it it it it"
 	}
 
-SPEED = 144
+
+TEST = false

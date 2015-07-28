@@ -31,6 +31,8 @@ def get_markov_data(pattern,speed,pitch)
 	define_verse_pattern
 	make_chorus
 
+	add_syllable_count_to_verses
+
 
 	# get_ipa line
 end
