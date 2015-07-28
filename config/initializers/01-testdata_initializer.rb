@@ -21,7 +21,7 @@ TESTVERSES = [
 				]
 				
 TESTCHORUS = { 
-		1=>"lying trying flying dying with my girl and with my man.\n",
+		1=>"lying trying flying dying Standing by the bed Standing by the bed.\n",
 		2=>"lying trying flying dying with my girl and with my man"
 		# 3=>"It it it it it it it.",
 		# 4=>"It it it it it it it"

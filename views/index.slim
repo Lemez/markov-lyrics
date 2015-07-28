@@ -13,29 +13,107 @@
 			var stream1;
 			var mySpeed;
 			var myLineBreak = 0;
+			var bpm = 60000/126;
+			var onePerBar = bpm*4;
+			var twoPerBar = bpm*2;
+			var threePerBar = bpm*2/3;
+			var fourPerBar = bpm;
+			var offsetFeel = 50;
+			var mySpeechArray = [];
 
+			//setTimeout(loadSpeakData, 1000);
+			//var myText = $('#speak').text();
+			//$(':input').on('change', function() {loadSpeakData();});			
+			//$('#speak-btn').on('click', function() {meSpeak.play(stream1);});
+			// function loadSpeakData() {
+			// 	meSpeak.stop();
+			// 	stream1 = meSpeak.speak(myText,getOptions());
+			// }
 
-			setTimeout(loadSpeakData, 1000);
+			// function getOptions(){
+			// 	mySpeed = parseInt($('#boxL').text()); 
+			// 	console.log(mySpeed);
+			// 	return {speed:mySpeed,
+			// 			linebreak:myLineBreak,
+			// 			capitals:10,
+			// 			wordgap: 0,
+			// 			'rawdata': 'base-64'}
+			// }
 
-			var myText = $('#speak').text();
-			$(':input').on('change', function() {loadSpeakData();});			
-			$('#speak-btn').on('click', function() {meSpeak.play(stream1);});
+			// function playNormally(){
+			//	meSpeak.play(stream1);
+			//}
 
-			function loadSpeakData() {
-				meSpeak.stop();
-				stream1 = meSpeak.speak(myText,getOptions());
+			// breaking it into words
+			setTimeout(loadSpeakArrayData, 1000);
+
+			var myTextArray = $('#speak').text().split("\n");
+
+			function capitalizeFirstLetter(string) {
+    			return string.charAt(0).toUpperCase() + string.slice(1);
 			}
 
-			function getOptions(){
-				mySpeed = parseInt($('#boxL').text()); 
-				console.log(mySpeed);
-				return {speed:mySpeed,
-						linebreak:myLineBreak,
+			function loadSpeakArrayData() {
+				for (var i=0; i<myTextArray.length; i++) {
+					textToAppend = myTextArray[i];
+
+					if (i % 6 == 0 || i % 6 == 2 ) {
+						textToAppend = capitalizeFirstLetter(textToAppend);
+					}
+
+					newItem = meSpeak.speak(textToAppend,getRiddimOptions());
+
+					mySpeechArray.push(newItem);
+				}
+			}
+
+			function playWord(){
+				word = mySpeechArray[0];
+				meSpeak.play(word);
+				mySpeechArray.shift();
+			}
+
+			function playInRiddim(){
+				
+			
+				// intervalId = setInterval(function () {	
+				// 				playWord();
+				// 				if (mySpeechArray.length < 1) clearInterval(intervalId);
+				// 				},	
+				// 					fourPerBar);	
+				// }
+
+				var counter = fourPerBar;
+				var divider = 4;
+				var lengthOffset = mySpeechArray.length % divider;
+
+				var myFunction = function(){
+
+					clearInterval(intervalId);
+					counter = fourPerBar;
+				    
+				    playWord();
+
+				    indicator = (mySpeechArray.length - lengthOffset) % 6;
+				    if (indicator == 0 || indicator == 1) {
+				    	counter = twoPerBar;
+				    	console.log(mySpeechArray.length - lengthOffset);
+				    };
+
+				    intervalId = setInterval(myFunction, counter);
+				}
+
+				var intervalId = setInterval(myFunction, counter);
+			}
+
+			function getRiddimOptions(){
+				slowSpeed = 180; 
+				return {speed:slowSpeed,
 						capitals:10,
-						wordgap: 0,
 						'rawdata': 'base-64'}
 			}
-			
+
+		
 			// Music playing functions
 			var myAudio = new Howl({
 				  urls: ['drums1.ogg', 'drums1.wav'],
@@ -45,9 +123,12 @@
 				});
 
 			$('#play').on('click', function() {
-				myAudio.play();
-				meSpeak.play(stream1);
+				//playNormally(); 
+				playInRiddim();
+				setTimeout(function(){
+				myAudio.play()}, offsetFeel);
 			});
+
 			$('#stop').on('click', function() {myAudio.stop();});
 			$('#quieter').on('click', function() {myAudio.volume(myAudio.volume() - 0.1);});
 			$('#louder').on('click', function() {myAudio.volume(myAudio.volume() + 0.1);});
@@ -56,7 +137,8 @@
 
 
 #speak
-	= @chorus.values.join(" ").split(" ").join(".\n")
+	= @chorus.values.join(" ").split(" ").join("\n")
+
 
 br
 ul.list-group
