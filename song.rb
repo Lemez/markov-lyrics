@@ -7,7 +7,7 @@ def validate_pattern (pattern)
 end
 
 def validate_speed (speed)
-	speed = 126 if speed.nil? or speed.empty?
+	speed = SPEED if speed.nil? or speed.empty?
 	p "speed=#{speed}======="
 	@speed = speed
 end

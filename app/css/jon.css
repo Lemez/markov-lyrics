@@ -16,13 +16,19 @@ div.lyrics {
   background-color: yellow;
 }
 
-select {
-  margin: 10% auto 10% auto;
+
+#boxL {
+  float: left;
+  font-size: 2em;
+}
+
+button {
+  margin: 1% auto 1% auto;
 }
 .input-bar {
   position: relative;
   top: 15%;
-  left: 50%;
+  left: 40%;
   padding: 0.25em 0;
   width: 10em;
   height: 3em;
@@ -34,12 +40,6 @@ select {
   font-size: 1em;
   cursor: pointer;
 }
-
-
-#boxL {
-  font-size: 2em;
-}
-
 
 ul
 {

@@ -1,0 +1,6 @@
+form method="put" action="/"
+	select name="patterns"
+		- PATTERNS.each do |p|
+	  		option name='#{p}'  value='#{p}' onmouseover="$(this).addClass('selected');" onmouseleave="$(this).removeClass('selected');" = p 
+
+		input type="submit" name="Submit" 

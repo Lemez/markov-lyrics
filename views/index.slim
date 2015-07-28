@@ -1,43 +1,62 @@
 #audio
 	javascript:
-		var myAudio = new Howl({
-			  urls: ['drums1.ogg', 'drums1.wav'],
-			  loop: true,
-			  volume: 0.8
-			  // onend: function() {console.log('done!');}
+
+		function loadMeSpeakConfig(){
+			meSpeak.loadConfig('mespeak/mespeak_config.json');
+			meSpeak.loadVoice('mespeak/voices/en/en-us.json');
+		}
+
+		$(document).ready( function() {
+
+			// Speak functions
+			var options;
+			var stream1;
+			var mySpeed;
+			var myLineBreak = 0;
+
+
+			setTimeout(loadSpeakData, 1000);
+
+			var myText = $('#speak').text();
+			$(':input').on('change', function() {loadSpeakData();});			
+			$('#speak-btn').on('click', function() {meSpeak.play(stream1);});
+
+			function loadSpeakData() {
+				meSpeak.stop();
+				stream1 = meSpeak.speak(myText,getOptions());
+			}
+
+			function getOptions(){
+				mySpeed = parseInt($('#boxL').text()); 
+				console.log(mySpeed);
+				return {speed:mySpeed,
+						linebreak:myLineBreak,
+						capitals:10,
+						wordgap: 0,
+						'rawdata': 'base-64'}
+			}
+			
+			// Music playing functions
+			var myAudio = new Howl({
+				  urls: ['drums1.ogg', 'drums1.wav'],
+				  loop: true,
+				  volume: 0.5 //value btw 0 and 1
+				  // onend: function() {console.log('done!');}
+				});
+
+			$('#play').on('click', function() {
+				myAudio.play();
+				meSpeak.play(stream1);
 			});
-
-		function enableLoop() { 
-		  // var myAudio = document.getElementById('drums');
-		  // myAudio.paused ? myAudio.play() : myAudio.pause();
-
-		  // lowLag.init({"sm2url":"/sm2/swf/"});
-		  // lowLag.load(["drums1.ogg","drums1.wav"],"drums");
-		  // lowLag.play("drums");
-		} 
-
-
-		$('#play').on('click', function() {
-			myAudio.play();
-		});
-
-		$('#stop').on('click', function() {
-			myAudio.stop();
+			$('#stop').on('click', function() {myAudio.stop();});
+			$('#quieter').on('click', function() {myAudio.volume(myAudio.volume() - 0.1);});
+			$('#louder').on('click', function() {myAudio.volume(myAudio.volume() + 0.1);});
 		});
 
 
 
 #speak
-	= @chorus.values.join(" ")
-javascript:
-	meSpeak.loadConfig("mespeak/mespeak_config.json");
-	meSpeak.loadVoice('mespeak/voices/en/en-us.json');
-	$('#speak-btn').on('click', function() {
-		var text = $('#speak').text();
-		meSpeak.speak(text);
-		console.log(text);
-		// $('#speech').html('- speak_chorus');
-	});
+	= @chorus.values.join(" ").split(" ").join(".\n")
 
 br
 ul.list-group

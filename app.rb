@@ -17,7 +17,6 @@ set :database, {adapter: "sqlite3", database: "markov.sqlite3"}
 
 Slim::Engine.set_options shortcut: {'&' => {tag: 'input', attr: 'type'}, '#' => {attr: 'id'}, '.' => {attr: 'class'}}
 
-
 class HelloWorldApp < Sinatra::Base
 
 	register Sinatra::ActiveRecordExtension
@@ -51,22 +50,22 @@ class HelloWorldApp < Sinatra::Base
 		   	]  
   	}
 
-  	
-
   	@@reloading = true
+  	
 
 	get '/' do
 
-	    	pattern = params[:patterns]
-	    	speed = params[:speed]
-	      	pitch = params[:pitch]
+	    	pattern,speed,pitch = params[:patterns], params[:speed], params[:pitch]
 	    
-	     	get_markov_data(pattern,speed,pitch) if @@reloading
+	     	unless TEST
+	     		get_markov_data(pattern,speed,pitch) if @@reloading
+	     	end
 
-	      	@data = @@verses
-	  	  	@chorus = @@chorus
-	  	  	@drums = "/audio/drums1.ogg"
+	     	TEST ? @data = TESTVERSES : @data = @@verses
+	     	TEST ? @chorus = TESTCHORUS : @chorus = @@chorus
 
+	     	validate_speed(speed)
+	     	
 	      	slim :index,
 		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}
 

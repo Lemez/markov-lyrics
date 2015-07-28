@@ -19,7 +19,6 @@ require_relative './meaning'
 require_relative './speak'
 
 
-
 def get_markov_data(pattern,speed,pitch)
 
 	setup_song(pattern,speed,pitch)

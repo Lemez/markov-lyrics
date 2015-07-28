@@ -8,7 +8,7 @@ html
 	== css :application
 	== js :application
 
-  body
+  body onload="javascript:loadMeSpeakConfig()"
     .container
     	nav.navbar.navbar-default role="navigation"
 			.navbar-header
@@ -24,7 +24,8 @@ html
 			    a.navbar-brand href="/" Markov Lyrics Generator
 
 			    div.nav-collapse
-			    == partial ('partials/form')
+
+		    	
 			           
 
 			    / div class="navbar-collapse collapse"
@@ -44,15 +45,20 @@ html
 				   /          li class="divider"
 				   /          li
 				   /          	a href="/logout" Logout
+		#boxL = @speed
+		== partial ('partials/form')
 
-
-    	a.btn.btn-primary href="/"  REFRESH
     	button.btn.btn-primary#speak-btn SPEAK
+
     	.play
+    		button#quieter -
     		button#play PLAY
+    		button#louder +
     		audio#drums [loop type="audio/ogg" src="drums1.ogg"] 
     		button#stop STOP
-    	
+
+    	== partial ('partials/select')
+
 		.lyrics
 			 - if @error
 			    div.alert.alert-error
