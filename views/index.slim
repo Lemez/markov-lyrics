@@ -14,10 +14,12 @@
 			var mySpeed;
 			var myLineBreak = 0;
 			var bpm = 60000/126;
+
 			var onePerBar = bpm*4;
 			var twoPerBar = bpm*2;
-			var threePerBar = bpm*2/3;
+			var threePerBar = bpm*3/2;
 			var fourPerBar = bpm;
+		
 			var offsetFeel = 50;
 			var mySpeechArray = [];
 
@@ -75,33 +77,29 @@
 
 			function playInRiddim(){
 				
-			
-				// intervalId = setInterval(function () {	
-				// 				playWord();
-				// 				if (mySpeechArray.length < 1) clearInterval(intervalId);
-				// 				},	
-				// 					fourPerBar);	
-				// }
-
 				var counter = fourPerBar;
-				var divider = 4;
-				var lengthOffset = mySpeechArray.length % divider;
+				var beats = 1;
 
 				var myFunction = function(){
 
-					clearInterval(intervalId);
-					counter = fourPerBar;
-				    
-				    playWord();
+								clearInterval(intervalId);
+								
+							    playWord();
 
-				    indicator = (mySpeechArray.length - lengthOffset) % 6;
-				    if (indicator == 0 || indicator == 1) {
-				    	counter = twoPerBar;
-				    	console.log(mySpeechArray.length - lengthOffset);
-				    };
+							    indicator = (beats + 5) % 6;
+							    pauseAtEndof4thbar = beats % 11;
 
-				    intervalId = setInterval(myFunction, counter);
-				}
+							    // pattern = Y Y |yyyy|Y Y |yyY |
+							    if (indicator == 0 || indicator == 1 || pauseAtEndof4thbar == 0) {
+							    	counter = twoPerBar;
+							    } else {
+							    	counter = fourPerBar;
+							    }
+
+							    beats==11 ? beats=1 : beats++;
+
+							    intervalId = setInterval(myFunction, counter);
+							}
 
 				var intervalId = setInterval(myFunction, counter);
 			}

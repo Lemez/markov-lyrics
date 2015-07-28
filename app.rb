@@ -52,7 +52,7 @@ class HelloWorldApp < Sinatra::Base
 
   	@@reloading = true
   	
-
+  	
 	get '/' do
 
 	    	pattern,speed,pitch = params[:patterns], params[:speed], params[:pitch]
@@ -65,11 +65,16 @@ class HelloWorldApp < Sinatra::Base
 	     	TEST ? @chorus = TESTCHORUS : @chorus = @@chorus
 
 	     	validate_speed(speed)
-	     	
+
 	      	slim :index,
 		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}
 
 	end
+
+	get "/array", :provides => :json do
+    	content_type :json
+    	@chorus.to_json
+ 	 end
 
 	put '/' do
 
