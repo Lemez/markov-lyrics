@@ -59,6 +59,9 @@ class HelloWorldApp < Sinatra::Base
 	    
 	     	unless TEST
 	     		get_markov_data(pattern,speed,pitch) if @@reloading
+
+	     		@song = save_song_data_to_db
+
 	     	end
 
 	     	TEST ? @data = TESTVERSES : @data = @@verses

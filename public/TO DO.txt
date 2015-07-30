@@ -1,5 +1,13 @@
 TO DO
 
+Set up text rules:
+click on a sentence and its problematic bits to make sure that similar sentences are ignored in future:
+- eg Sentence with certain pattern of POS tags
+- sentence which has pronouns that dont go together eg we / me
+
+Set up rhythm rules:
+- syllable based lines
+
 http://responsivevoice.org/api/
 VOCODER JS
 

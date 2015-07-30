@@ -11,7 +11,7 @@ require_relative './verse'
 require_relative './models/song'
 
 require_relative './markov'
-require_relative './song'
+require_relative './song_methods'
 require_relative './nlp'
 require_relative './syllables'
 require_relative './rhyme'
@@ -31,9 +31,7 @@ def get_markov_data(pattern,speed,pitch)
 	define_verse_pattern
 	make_chorus
 
-	add_syllable_count_to_verses
-
-
+	# add_syllable_count_to_verses
 	# get_ipa line
 end
 
@@ -64,18 +62,13 @@ def sort_lines_into_rhymes
 	
 end
 
-def is_word_alpha?(word)
-	return word =~ /[A-Za-z]/
-end
+
 
 def detect_last_pos
 	@temp = []
 	 @@data.each do |d| 
-	 	sentence_pos = parse_sentence d[0]
-	 	last_word, last_word_pos = sentence_pos[-1][-1][0], sentence_pos[-1][-1][-1]
 
-	 	realword = is_word_alpha?(last_word)
-	 	last_word_pos = sentence_pos[-1][-2][-1] if realword.nil?
+	 	last_word_pos = get_sentence_pos(d)
 
 	 	d << last_word_pos
 	 	@temp << d
@@ -101,67 +94,10 @@ end
 
 
 
-def get_random_word(array)
-	randomarray = array[Random.rand(array.length)][0].split(" ")
-	return randomarray
-end
 
-def get_long_word(array)
-	get_random_word(array).longest.alpha_strip
-end
-
-def get_short_word(array)
-	get_random_word(array).shortest.alpha_strip
-end
 	
-def get_short_phrase n
-	@@markov.generate_n_words(n)
-end
 
 
-
-
-##### Separate dictionaries for each artist - not working very well as not enough input sources currently
-
-def make_artist_dictionaries
-	Dir.glob("#{source}/*/*").each do |folder|
-
-		path,artistname = File.split(folder)
-		p artistname
-
-		markov = MarkyMarkov::Dictionary.new("#{artistname}") # Saves/opens dictionary.mmd
-			Dir.glob("#{folder}/*.txt").each do |f|
-				begin
-					problematic_files.each{|a| next if f.include?(a)}
-					markov.parse_file f
-				rescue ArgumentError => e
-					puts "#{e}: #{f}"
-				end
-			end
-		markov.save_dictionary!
-	end
-end
-
-def print_examples_from_artist_dictionaries
-	Dir.glob("#{Dir.pwd}/*.mmd").each do |dictionary|
-		artist = File.basename(dictionary, ".mmd")
-		markov = MarkyMarkov::Dictionary.new(artist)
-		p "+++#{artist}++++"
-
-		5.times do
-			num = Random.rand(11) + 10
-			words = markov.generate_n_words num
-			words.split(" ").each do |w|
-				words.delete!(w) if w.downcase.include?("chorus") or w.downcase.include?("verse") \
-								or w.downcase.include?("[") or w.downcase.include?("\\") 
-			end
-			
-			p "#{num}:#{words}"
-			
-		end
-		p "---"
-	end
-end
 
 
 

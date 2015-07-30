@@ -19,3 +19,7 @@ class String
 		self.gsub(/[^A-Aa-z ]/,"")
 	end
 end
+
+def is_word_alpha?(word)
+	return word =~ /[A-Za-z]/
+end

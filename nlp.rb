@@ -33,6 +33,17 @@ def parse_sentence textinput
 	words
 end
 
+def get_sentence_pos(d)
+		sentence_pos = parse_sentence d[0]
+	 	last_word, last_word_pos = sentence_pos[-1][-1][0], sentence_pos[-1][-1][-1]
+
+	 	realword = is_word_alpha?(last_word)
+	 	last_word_pos = sentence_pos[-1][-2][-1] if realword.nil?
+
+	 	return last_word_pos
+end
+
+
 def get_ipa line
 	words = line.gsub(/[^A-Za-z ]/i, '')
 	# p words.split(" ").map{|e| e.to_ipa}

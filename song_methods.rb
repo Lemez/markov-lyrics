@@ -1,5 +1,38 @@
 PATTERNS = ['AABB', 'ABAB', 'ABBA']
 
+# line
+# :line_number, :number_of_words, :number_of_syllables, :last_word_rhyme, :last_word_pos, :line, :has_rhyme
+
+
+
+def save_song_data_to_db
+
+	Song.new(@pattern,@@verses) do |song|
+
+		chorus = Stanza.new("chorus",song.id)
+		chorus.save_as_chorus(@@chorus)
+
+		song.each_with_index do |verse_hash, i|
+
+			verse = Stanza.new("verse",song.id)
+
+			verse.save_as_verse(verse_hash, i)
+
+			verse_hash.each_pair do |line_no, line_data|
+				text = line_data[0]
+
+				line = Line.new()
+			end
+
+		end
+	
+
+	end
+	
+end
+
+
+
 def validate_pattern (pattern)
 	pattern = "ABAB" if pattern.nil? or !PATTERNS.include?(pattern) 
 	p "======pattern=#{pattern}=="
@@ -26,7 +59,6 @@ def setup_song(pattern,speed,pitch)
 	validate_pattern(pattern)
 	validate_speed(speed)
 	validate_pitch(pitch)
-	@song = Song.new(pattern: @pattern)
 	
 end
 
