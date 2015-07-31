@@ -100,7 +100,11 @@
 
 								clearInterval(intervalId);
 								
-							    playWord();
+							    if (mySpeechArray.length > 0 ){
+							    	playWord();
+							    }else{
+							    	return;
+							    }
 
 							    indicator = (beats + 5) % 6;
 							    pauseAtEndof4thbar = beats % 11;
@@ -151,7 +155,7 @@
 
 
 #speak
-	= @chorus_lines.join(" ").split(" ").join("\n")
+	= @chorus_lines.join(" ").split(" ").map(&:alpha_strip).join("\n")
 
 br
 ul.list-group

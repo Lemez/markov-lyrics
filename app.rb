@@ -70,15 +70,7 @@ class HelloWorldApp < Sinatra::Base
 
 	     	validate_speed(speed)
 
-	     	p "VERSES in markov: #{@@verses}"
-	     	p "VERSES in server = #{@verses}"
-	     	p "Chor in markov: #{@@chorus}"
-	     	p "CHorus in server = #{@chorus}"
-	     	p "CHorus lines in server = #{@chorus.number_lines}"
-
 	     	@chorus_lines = Line.from_chorus(@chorus.id).flat_map(&:line)
-
-	     	binding.pry
 
 	      	slim :index,
 		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}

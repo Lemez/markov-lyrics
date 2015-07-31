@@ -1,7 +1,7 @@
 class Chorus < ActiveRecord::Base
 
 	belongs_to :song
-	has_many :lines
+  	has_many :lines
 
 	# store :settings, accessors: [:song_id, :number_lines, :pattern], coder: JSON
 
@@ -18,13 +18,20 @@ class Chorus < ActiveRecord::Base
   	def save_lines(data)
   		chorus_id = self.id
 		data.each_pair do |number,text| 
-			@line = Line.new({:line_number => number,
-										:line => text, 
-										:chorus_id=> chorus_id
+
+			@line = Line.create({
+            			:line_number => number,
+						:line => text, 
+						:chorus_id=> chorus_id,
+           				:number_of_words => text.split(" ").length,
+           				:number_of_syllables => get_syllables_better(text),
+            			:last_word_rhyme => get_last_word_rhyme(text),
+            			:last_word_pos => get_sentence_pos(text)
 												})
-			@line.set_line_pos_syl_rhymes(text)
-			@line.save!
-		end
+
+      p "1st pass at line: #{@line}, #{@line.last_word_rhyme}"
+
   	end
+  end
 
 end
