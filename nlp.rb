@@ -34,7 +34,7 @@ def parse_sentence textinput
 end
 
 def get_sentence_pos(d)
-		sentence_pos = parse_sentence d[0]
+		sentence_pos = parse_sentence d
 	 	last_word, last_word_pos = sentence_pos[-1][-1][0], sentence_pos[-1][-1][-1]
 
 	 	realword = is_word_alpha?(last_word)

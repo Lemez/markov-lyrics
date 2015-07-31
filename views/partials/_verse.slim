@@ -1,9 +1,11 @@
-- puts "--#{@d}---" 
-li.list-group-item
-	= @d[0] 
-	span.badge = @d[1]
-	span.badge = @d[2]
-	span.badge = @d[3] 
+li
+	= verse.position
 
-
-	
+- Line.where(verse_id: verse.id).order(:line_number).each do |line|
+	li.list-group-item
+		span.badge = line.line_number
+		= line.line 
+		span.badge = line.number_of_words
+		span.badge = line.number_of_syllables
+		span.badge = line.last_word_rhyme
+		span.badge = line.last_word_pos

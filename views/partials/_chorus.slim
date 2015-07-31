@@ -1,5 +1,8 @@
-- @chorus.keys.length.times do |i|
-	- @d = @chorus[i+1] 
-	- puts "--#{@d}---" 
-	li class="list-group-item" style="font-weight:bold;" = @d
-br
+- chorus.lines.each do |chorusline|
+	li.list-group-item style="font-weight:bold;" 
+		span.badge = chorusline.line_number
+		= chorusline.line 
+		span.badge = chorusline.number_of_words
+		span.badge = chorusline.number_of_syllables
+		span.badge = chorusline.last_word_rhyme
+		span.badge = chorusline.last_word_pos

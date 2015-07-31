@@ -6,7 +6,6 @@ require 'slim'
 require "sinatra/activerecord"
 require 'sinatra-initializers'
 require 'pry'
-require 'sinatra/base'
 require 'sinatra/asset_pipeline'
 require 'sinatra/assetpack'
 
@@ -16,6 +15,10 @@ set :database, {adapter: "sqlite3", database: "markov.sqlite3"}
 # or set :database_file, "path/to/database.yml"
 
 Slim::Engine.set_options shortcut: {'&' => {tag: 'input', attr: 'type'}, '#' => {attr: 'id'}, '.' => {attr: 'class'}}
+
+ActiveSupport::Inflector.inflections { |i| 
+  i.irregular 'chorus', 'choruses' 
+}
 
 class HelloWorldApp < Sinatra::Base
 
@@ -59,25 +62,33 @@ class HelloWorldApp < Sinatra::Base
 	    
 	     	unless TEST
 	     		get_markov_data(pattern,speed,pitch) if @@reloading
-
 	     		@song = save_song_data_to_db
-
 	     	end
 
-	     	TEST ? @data = TESTVERSES : @data = @@verses
-	     	TEST ? @chorus = TESTCHORUS : @chorus = @@chorus
+	     	TEST ? @verses = TESTVERSES : @verses = Verse.where(song_id: @song.id).order(:position).to_a
+	     	TEST ? @chorus = TESTCHORUS : @chorus = Chorus.where(song_id: @song.id).first
 
 	     	validate_speed(speed)
+
+	     	p "VERSES in markov: #{@@verses}"
+	     	p "VERSES in server = #{@verses}"
+	     	p "Chor in markov: #{@@chorus}"
+	     	p "CHorus in server = #{@chorus}"
+	     	p "CHorus lines in server = #{@chorus.number_lines}"
+
+	     	@chorus_lines = Line.from_chorus(@chorus.id).flat_map(&:line)
+
+	     	binding.pry
 
 	      	slim :index,
 		       :locals => { :pattern => pattern, :speed => speed, :pitch => pitch}
 
 	end
 
-	get "/array", :provides => :json do
-    	content_type :json
-    	@chorus.to_json
- 	 end
+	# get "/array", :provides => :json do
+ #    	content_type :json
+ #    	@chorus.to_json
+ # 	 end
 
 	put '/' do
 

@@ -28,3 +28,4 @@ TESTCHORUS = {
 
 
 TEST = false
+SONGPATTERN = 'VVCVVCC'
