@@ -1,0 +1,13 @@
+#boxL = @speed
+		== partial ('partials/form')
+
+    	button.btn.btn-primary#speak-btn SPEAK
+
+    	.play
+    		button#quieter -
+    		button#play PLAY
+    		button#louder +
+    		audio#drums [loop type="audio/ogg" src="drums1.ogg"] 
+    		button#stop STOP
+
+    	== partial ('partials/select')

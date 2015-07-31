@@ -77,6 +77,23 @@ class HelloWorldApp < Sinatra::Base
 
 	end
 
+		get '/lines' do
+
+			random_ids = Line.not_daft.map(&:id).sort_by{ rand }.slice(0, 100)
+			@lines = Line.where(:id => random_ids)
+	      	slim :lines
+	end
+
+	post '/lines' do
+
+			dodgy_ids = params['ids']
+			add_daft_to_bad_lines(dodgy_ids)
+
+			random_ids = Line.not_daft.map(&:id).sort_by{ rand }.slice(0, 100)
+			
+	      	slim :lines
+	end
+
 	# get "/array", :provides => :json do
  #    	content_type :json
  #    	@chorus.to_json

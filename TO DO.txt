@@ -12,3 +12,9 @@ http://responsivevoice.org/api/
 VOCODER JS
 
 GOOGLE VOICE API?
+
+
+Start again:
+
+- Create lines and if they are not good, save as "is_daft" - migration for Line 
+- get all POS for lines, try to identify good and bad pos patterns

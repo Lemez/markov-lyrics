@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150730135536) do
+ActiveRecord::Schema.define(version: 20150731121512) do
 
   create_table "choruses", force: :cascade do |t|
     t.string  "pattern"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 20150730135536) do
     t.boolean "has_rhyme"
     t.integer "verse_id"
     t.integer "chorus_id"
+    t.boolean "is_daft",             default: false
   end
 
   create_table "songs", force: :cascade do |t|
@@ -40,6 +41,9 @@ ActiveRecord::Schema.define(version: 20150730135536) do
     t.string   "song_pattern"
     t.integer  "number_of_verses"
     t.integer  "number_lines"
+  end
+
+  create_table "stanzas", force: :cascade do |t|
   end
 
   create_table "tokens", force: :cascade do |t|

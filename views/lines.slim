@@ -1,0 +1,38 @@
+.right
+	#reasons
+		span.badge style="font-size: 1em;" Repetition
+		span.badge style="font-size: 1em;" POS_Grammar
+		span.badge style="font-size: 1em;" Punctuation
+		span.badge style="font-size: 1em;" Pronouns
+		span.badge style="font-size: 1em;" Last Word
+	#ids
+
+ul#lines.list-group
+	- @lines.each do |line|
+		li#clickable name="#{line.id}"
+		 	= line.line
+			span.badge.reason
+
+javascript:
+	var ids = [];
+	$('li#clickable').on('click', function(){
+
+		var myId = $(this).attr('name');
+		var index = ids.indexOf(myId);
+
+		index == -1 ? $(this).addClass('selected').addClass('latest') : $(this).removeClass('selected');
+		index == -1 ? ids.push(myId) : ids.splice(index, 1);
+
+		$(this).siblings().removeClass('latest');
+		$('#ids').text(ids);
+		console.log(ids);
+	});
+
+	$('#reasons span').on('click', function(){
+		var why = $(this).text();
+
+		$('li.latest span').text(why);
+
+		console.log(why);
+
+	});

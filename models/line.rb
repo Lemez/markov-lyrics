@@ -5,6 +5,7 @@ class Line < ActiveRecord::Base
   # store :settings, accessors: [:line_number, :number_of_words, :number_of_syllables, :last_word_rhyme, :last_word_pos, :line, :has_rhyme, :stanza_id], coder: JSON
 
   scope :from_chorus, ->(id) { where(chorus_id: id) }
+  scope :not_daft, -> { where(is_daft: false) }
 
 
   def init (options={})

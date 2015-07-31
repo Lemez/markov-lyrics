@@ -53,3 +53,10 @@ def get_rhyme(line)
 	line.to_phrase.flat_rhymes
 end
 
+def add_daft_to_bad_lines(ids)
+	Line.where(:id => ids).each do |line|
+		line.is_daft = true
+		line.save!
+	end
+end
+

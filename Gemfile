@@ -29,6 +29,8 @@ gem "rake"
  gem "pry"
  gem 'parallel'
 
+ gem 'migration_data'
+
  # gem 'gemcutter'
  # gem 'tumble'
  # gem 'words'
