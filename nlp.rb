@@ -1,13 +1,41 @@
 require 'string_to_ipa'
 require 'stanford-core-nlp'
 
+def set_up_nlp (word)
+	text = NLP.annotate(StanfordCoreNLP::Annotation.new(word))
+	text
+end
+
+def get_tokens(word)
+
+	text = set_up_nlp (word)
+
+	@tokens = 0
+	text.get(:tokens).each {|token| @tokens += 1}
+	# @text.get(:tokens).each {|token| p token.get(:value).to_s} if @tokens > 1
+	@tokens
+end
+
+def get_nlp word
+	results = {}
+
+	@tokens = 0
+	set_up_nlp(word).get(:tokens).each do |token|
+		@tokens =+ 1
+		results[:token] = token.get(:value).to_s
+		results[:lemma] = token.get(:lemma).to_s
+		results[:pos]  = token.get(:part_of_speech).to_s
+	end
+
+	results[:number_of_tokens] = @tokens
+	results
+
+end
 
 def parse_sentence textinput
 	words = []
-	text = StanfordCoreNLP::Annotation.new(textinput)
-	NLP.annotate(text)
 
-	text.get(:sentences).each do |sentence|
+	set_up_nlp(textinput).get(:sentences).each do |sentence|
 		sentenceAnnotated = []
         # Syntatical dependencies
 	    # puts sentence.get(:basic_dependencies).to_s

@@ -1,3 +1,4 @@
+require 'set'
 class String
 	def clean_up
 		words = self.split(" ")
@@ -17,6 +18,16 @@ class String
 
 	def alpha_strip
 		self.gsub(/[^A-Za-z ]/,"")
+	end
+
+	def prepare_for_parsing
+		self.gsub(/[^A-Za-z'-]/,"")
+		condition = ["\'","-"] & [self[0],self[-1]]
+		self.remove_first_last_punctuation unless condition.empty?
+	end
+
+	def remove_first_last_punctuation
+		self.gsub(/[^A-Za-z]/,"") 
 	end
 end
 

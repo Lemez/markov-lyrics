@@ -37,7 +37,7 @@ class HelloWorldApp < Sinatra::Base
 	set :static, true #PUT ALL STATIC FILES IN PUBLIC!
 
 	set :assets_precompile, %w(app.js app.css *.png *.jpg *.svg *.ogg *.wav *.swf)
-	register Sinatra::AssetPipeline 
+	# register Sinatra::AssetPipeline 
 
 	assets {
 
@@ -64,6 +64,9 @@ class HelloWorldApp < Sinatra::Base
 	     	unless TEST
 	     		get_markov_data(pattern,speed,pitch) if @@reloading
 	     		@song = save_song_data_to_db
+	     	else 
+	     		@line = Line.new(line: "Hello there, isn't my friend, how you're doin' baby uh-huh!")
+	     		@line.save_words!(5)
 	     	end
 
 	     	TEST ? @verses = TESTVERSES : @verses = Verse.where(song_id: @song.id).order(:position).to_a
