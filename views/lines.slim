@@ -23,9 +23,10 @@ ul#lines.list-group
 
 javascript:
 	var ids = [];
+	var index;
 	$('li#clickable').click(function(){
 		var myId = $(this).attr('name');
-		var index = ids.indexOf(myId);
+		index = ids.indexOf(myId);
 
 		index == -1 ? $(this).removeClass('great').addClass('selected').addClass('latest') : $(this).removeClass('selected');
 		index == -1 ? ids.push(myId) : ids.splice(index, 1);
@@ -40,8 +41,12 @@ javascript:
 	});
 
 	$('span.checkmark').click(function(){
-		$('li[name=' + $(this).attr('id') + ']').toggleClass("great")
+		var checkId = $(this).attr('id');
+		$('li[name=' + checkId + ']').toggleClass("great")
 												.removeClass('selected').removeClass('latest');
+		index = ids.indexOf(checkId);
+		alert(ids);
+		if (index != -1) {ids.splice(index, 1);$('#lineids').html('<p>' + ids + '</p>');}
 
 	});
 

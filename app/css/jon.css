@@ -46,7 +46,11 @@ div.lyrics {
   position: fixed;
   width: 50%;
   left: 50%;
+  z-index: 1000;
+}
 
+.badge {
+  margin: auto 1px auto 1px; 
 }
 
 #ids {
@@ -63,7 +67,6 @@ div.lyrics {
   display: inline-block;
   font-size: 2em;
   float: left;
- 
 }
 
 
@@ -74,6 +77,8 @@ div.lyrics {
 li {
   width: 90%;
   padding-left: 5%;
+  position: relative; 
+  z-index:1;
 }
 
 li > span.reason {
@@ -85,11 +90,14 @@ li > span.reason {
 }
 
 
+#speak-btn {
+  display: inline;
+}
 
-
-#boxL {
-  float: left;
+#boxL  {
+  
   font-size: 2em;
+  display: inline;
 }
 
 button {
@@ -98,7 +106,7 @@ button {
 .input-bar {
   position: relative;
   top: 15%;
-  left: 40%;
+  left: 10%;
   padding: 0.25em 0;
   width: 10em;
   height: 3em;
@@ -110,6 +118,7 @@ button {
   font-size: 1em;
   cursor: pointer;
 }
+
 
 ul
 {

@@ -89,10 +89,11 @@ class HelloWorldApp < Sinatra::Base
 
 			@bad_line_params = JSON.parse(params[:ids])['bad']
 			@good_line_params = JSON.parse(params[:ids])['good']
+			@line_params = JSON.parse(params[:ids])
 
 			binding.pry
 
-			store_bad_line_attributes(@bad_line_params)
+			store_line_attributes(@line_params)
 
 			# random_ids = Line.not_daft.map(&:id).sort_by{ rand }.slice(0, 100)
 			

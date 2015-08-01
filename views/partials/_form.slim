@@ -1,7 +1,11 @@
 form method="put" action="/"
+
 	.input-bar
 		&range min='20' max='200' value="#{@speed}" step='1' name="speed" oninput="$('#boxL').text($(this).value);" 
-		
 		/ &range min='10' max='100' value="#{@pitch}" step='10' name="pitch" onchange="$('#boxR').text($(this).value);" 
 		/ #boxR
+		
+		#boxL = @speed
+button.btn.btn-primary#speak-btn SPEAK
+		
 		

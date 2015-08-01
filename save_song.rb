@@ -23,10 +23,17 @@ def save_song_data_to_db
 	@song
 end
 
-def store_bad_line_attributes hash
-	hash.each_pair do |key,reason|
-		id = key.to_i
-		p "Line #{id} is bad, due to #{reason}"
+def store_line_attributes params
 
+	params.each_pair do |quality,hash|
+		quality=='good' ? attribute = :is_good : attribute = :is_daft
+
+		hash.each_pair do |id,reason|
+
+			Line.update(id, attribute => true, :why_daft => reason)
+
+			p "Line #{id} is #{quality}, due to #{reason}"
+
+		end
 	end
 end
