@@ -1,21 +1,25 @@
 .right
+	== partial ('partials/flash')
+
 	#reasons
-		span.badge style="font-size: 1em;" Repetition
-		span.badge style="font-size: 1em;" POS_Grammar
-		span.badge style="font-size: 1em;" Punctuation
-		span.badge style="font-size: 1em;" Pronouns
-		span.badge style="font-size: 1em;" Last Word
+		- ERRORS.each do |e|
+			span.badge style="font-size: 1em;" = e
+
 		#lineids
 		form#lines_feedback action='/lines'
 			
 			&submit value="Submit!"
+
 	
 
 ul#lines.list-group
 	- @lines.each do |line|
+		span.checkmark id="#{line.id}"
 		li#clickable name="#{line.id}"
+
 		 	= line.line
 			span.badge.reason
+
 
 javascript:
 	var ids = [];
@@ -23,7 +27,7 @@ javascript:
 		var myId = $(this).attr('name');
 		var index = ids.indexOf(myId);
 
-		index == -1 ? $(this).addClass('selected').addClass('latest') : $(this).removeClass('selected');
+		index == -1 ? $(this).removeClass('great').addClass('selected').addClass('latest') : $(this).removeClass('selected');
 		index == -1 ? ids.push(myId) : ids.splice(index, 1);
 
 		$(this).siblings().removeClass('latest');
@@ -32,31 +36,78 @@ javascript:
 
 	$('#reasons span').click(function(){
 		var why = $(this).text();
-
 		$('li.latest span').text(why);
+	});
 
+	$('span.checkmark').click(function(){
+		$('li[name=' + $(this).attr('id') + ']').toggleClass("great")
+												.removeClass('selected').removeClass('latest');
 
 	});
 
+	function populate_id_hash(string){
+
+		var tmphash = {};
+
+		JSON.parse(string,
+						function(index) {
+							var id = $(this)[index];
+							var reason = $('li[name='+ id + '] span.reason').text();
+							tmphash[id] = reason;					
+		});
+
+		delete tmphash[undefined];
+		return tmphash;
+	}
+
+	function successFunction(){
+		ids = [];
+		$('#lineids').html('<p></p>');
+		$('li').find('span.reason:first').text('');
+
+		$('li').removeClass('selected').removeClass('latest');
+
+		sendFlash("Thanks for sending!");
+	}
+
 	$('#lines_feedback').submit(function() {
 
-		var idHash = {};
-		var myIds = $('#lineids p').text();		
-		JSON.parse("[" + myIds + ']',
+		event.preventDefault();
 
-			function(a) {
-				var k = $(this)[a];
-				var reason = $('li[name='+ k + '] span.reason').text();
-				idHash[k] = reason;					
-		  	});
+		var badIdArray = "[" + $('#lineids p').text() + ']';
+		var badIdHash = populate_id_hash(badIdArray);
 
-		delete idHash[undefined];
 
-		var datatosend = JSON.stringify(idHash);
+		var goodIdArray = []
+
+		$( "li.great" ).each(function( index ) {
+  				goodIdArray.push( $(this).attr('name') );
+		});
+
+		var goodIdHash = {}
+
+		for (var i = 0; i < goodIdArray.length; i++) {
+			  goodIdHash[goodIdArray[i]] = '';
+			}
+
+		var idHash = {
+			bad : badIdHash,
+			good : goodIdHash
+		}
 		
 		var destination =  $(this).attr('action');
-        $.post(destination,{ids: datatosend});
+		var datatosend = JSON.stringify(idHash);
+
+        $.ajax({
+			    url: destination,
+			    type: "POST",
+			    data: {ids: datatosend},
+			    success: successFunction()
+			});
 
         });
+
+
+ 
 
 

@@ -17,4 +17,6 @@ NUMBER = opts[:number]
 
 SPEED = 88
 
+ERRORS = ['Spelling','Repetition','POS_Grammar','Punctuation','Pronouns','Last Word', 'Duplicate','Foreign','Nonsense']
+
 

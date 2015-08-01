@@ -22,3 +22,11 @@ def save_song_data_to_db
 
 	@song
 end
+
+def store_bad_line_attributes hash
+	hash.each_pair do |key,reason|
+		id = key.to_i
+		p "Line #{id} is bad, due to #{reason}"
+
+	end
+end

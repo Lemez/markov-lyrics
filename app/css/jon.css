@@ -9,6 +9,14 @@
   display: none;
 }
 
+#flash {
+  color: red;
+  font-size: 1em;
+  visibility: visible;
+  opacity: 0;
+  font-family: "Cardo", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+
 div.lyrics {
   height: 20%;
 }
@@ -21,6 +29,16 @@ div.lyrics {
 .latest {
   opacity: 1;
   background-color: #2ecc71;
+}
+
+.good {
+  background-color: #27ae60;
+  color: white;
+}
+
+.great {
+  background-color: gold;
+  color: black;
 }
 
 .right {
@@ -51,6 +69,11 @@ div.lyrics {
 
 #reasons > span.badge:hover {
   background-color: pink;
+}
+
+li {
+  width: 90%;
+  padding-left: 5%;
 }
 
 li > span.reason {
@@ -91,6 +114,11 @@ button {
 ul
 {
     list-style-type: none;
+
+}
+
+ul > li {
+   margin-left: 5%;
 }
 
 /*input[type='range'], input[type='range']::-webkit-slider-runnable-track, 
@@ -240,4 +268,40 @@ input[type='range']::-ms-thumb {
 input[type='range']:focus {
   outline: none;
   opacity: .99;
+}
+
+
+.checkmark {
+    display:inline-block;
+    width: 1em;
+    height:1em;
+    background: #27ae60;
+    border-radius:50%;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+    margin-right: 1em;
+    float: left;
+    position: absolute;
+    z-index: 100;
+}
+
+.checkmark:before{
+    content:"";
+    position: absolute;
+    width:3px;
+    height:9px;
+    background-color:#fff;
+    left:11px;
+    top:6px;
+}
+
+.checkmark:after{
+    content:"";
+    position: absolute;
+    width:3px;
+    height:3px;
+    background-color:#fff;
+    left:8px;
+    top:12px;
 }

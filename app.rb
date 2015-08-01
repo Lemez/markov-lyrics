@@ -81,17 +81,19 @@ class HelloWorldApp < Sinatra::Base
 	get '/lines' do
 
 			random_ids = Line.not_daft.map(&:id).sort_by{ rand }.slice(0, 100)
-			@lines = Line.where(:id => random_ids)
+			@lines = Line.where(:id => random_ids).uniq(&:line).order(:line)
 	      	slim :lines
 	end
 
 	post '/lines' do
 
-			@params = JSON.parse(params[:ids])
+			@bad_line_params = JSON.parse(params[:ids])['bad']
+			@good_line_params = JSON.parse(params[:ids])['good']
 
 			binding.pry
 
-			# add_daft_to_bad_lines(dodgy_ids)
+			store_bad_line_attributes(@bad_line_params)
+
 			# random_ids = Line.not_daft.map(&:id).sort_by{ rand }.slice(0, 100)
 			
 	      	slim :lines
