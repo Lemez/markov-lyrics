@@ -205,6 +205,7 @@ DEPENDENCIES
   awesome_print
   classifier
   espeak-ruby
+  json
   marky_markov
   migration_data
   opal

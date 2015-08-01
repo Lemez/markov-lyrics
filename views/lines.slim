@@ -5,7 +5,11 @@
 		span.badge style="font-size: 1em;" Punctuation
 		span.badge style="font-size: 1em;" Pronouns
 		span.badge style="font-size: 1em;" Last Word
-	#ids
+		#lineids
+		form#lines_feedback action='/lines'
+			
+			&submit value="Submit!"
+	
 
 ul#lines.list-group
 	- @lines.each do |line|
@@ -15,8 +19,7 @@ ul#lines.list-group
 
 javascript:
 	var ids = [];
-	$('li#clickable').on('click', function(){
-
+	$('li#clickable').click(function(){
 		var myId = $(this).attr('name');
 		var index = ids.indexOf(myId);
 
@@ -24,15 +27,36 @@ javascript:
 		index == -1 ? ids.push(myId) : ids.splice(index, 1);
 
 		$(this).siblings().removeClass('latest');
-		$('#ids').text(ids);
-		console.log(ids);
+		$('#lineids').html('<p>' + ids + '</p>');
 	});
 
-	$('#reasons span').on('click', function(){
+	$('#reasons span').click(function(){
 		var why = $(this).text();
 
 		$('li.latest span').text(why);
 
-		console.log(why);
 
 	});
+
+	$('#lines_feedback').submit(function() {
+
+		var idHash = {};
+		var myIds = $('#lineids p').text();		
+		JSON.parse("[" + myIds + ']',
+
+			function(a) {
+				var k = $(this)[a];
+				var reason = $('li[name='+ k + '] span.reason').text();
+				idHash[k] = reason;					
+		  	});
+
+		delete idHash[undefined];
+
+		var datatosend = JSON.stringify(idHash);
+		
+		var destination =  $(this).attr('action');
+        $.post(destination,{ids: datatosend});
+
+        });
+
+

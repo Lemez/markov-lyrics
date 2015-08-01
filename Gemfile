@@ -30,6 +30,7 @@ gem "rake"
  gem 'parallel'
 
  gem 'migration_data'
+ gem 'json'
 
  # gem 'gemcutter'
  # gem 'tumble'
